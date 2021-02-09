@@ -12,7 +12,7 @@ typedef long DEFRESULT;
 
 #if defined(__cplusplus)
 #define RESOURCE_SUPPRESS_STL
-#include <wil\resource.h>
+#include <wil/resource.h>
 #endif
 
 #include "mrm/common/Platform.h"

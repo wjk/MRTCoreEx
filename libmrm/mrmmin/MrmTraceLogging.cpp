@@ -2,7 +2,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 #include "stdafx.h"
-#include <mrm\common\mrmtracelogging.h>
+#include <mrm/common\mrmtracelogging.h>
 
 #ifdef ENABLE_MRT_IN_MEMORY_LOGGING
 class MrtLoggingData
