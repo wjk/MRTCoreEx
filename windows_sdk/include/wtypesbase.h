@@ -59,31 +59,22 @@ typedef OLECHAR *LPOLESTR;
 typedef const OLECHAR *LPCOLESTR;
 #define OLESTR(str) str
 
-#ifndef _WINDEF_
-#ifndef _MINWINDEF_
 typedef void *PVOID;
 typedef void *LPVOID;
 typedef float FLOAT;
-#endif
-#endif
 
 typedef unsigned char UCHAR;
 typedef short SHORT;
 typedef unsigned short USHORT;
 typedef DWORD ULONG;
 typedef double DOUBLE;
-#ifndef _DWORDLONG_
 typedef UINT64 DWORDLONG;
 typedef DWORDLONG *PDWORDLONG;
-#endif
 
-#ifndef _ULONGLONG_
 typedef INT64 LONGLONG;
 typedef UINT64 ULONGLONG;
 typedef LONGLONG *PLONGLONG;
 typedef ULONGLONG *PULONGLONG;
-#endif
-#if 0
 typedef struct _LARGE_INTEGER {
     LONGLONG QuadPart;
 } LARGE_INTEGER;
@@ -91,7 +82,6 @@ typedef LARGE_INTEGER *PLARGE_INTEGER;
 typedef struct _ULARGE_INTEGER {
     ULONGLONG QuadPart;
 } ULARGE_INTEGER;
-#endif
 
 #ifndef _WINBASE_
 #ifndef _FILETIME_
@@ -204,7 +194,7 @@ typedef struct _OBJECTID {
 } OBJECTID;
 #endif
 
-#if 0
+#if !defined(__cplusplus)
 typedef GUID *REFGUID;
 typedef IID *REFIID;
 typedef CLSID *REFCLSID;
