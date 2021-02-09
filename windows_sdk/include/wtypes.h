@@ -453,11 +453,7 @@ typedef OLECHAR *BSTR;
 typedef BSTR *LPBSTR;
 
 typedef short VARIANT_BOOL;
-#if 0
 typedef VARIANT_BOOL _VARIANT_BOOL;
-#else
-#define _VARIANT_BOOL /##/
-#endif
 
 #ifndef _tagBSTRBLOB_DEFINED
 #define _tagBSTRBLOB_DEFINED

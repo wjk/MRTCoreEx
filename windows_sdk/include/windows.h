@@ -5,3 +5,4 @@
 #include "strsafe.h"
 #include "wtypes.h"
 #include "wtypesbase.h"
+#include "winerror.h"

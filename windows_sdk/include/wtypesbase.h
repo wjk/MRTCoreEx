@@ -51,6 +51,7 @@ typedef WCHAR *LPWSTR;
 typedef TCHAR *LPTSTR;
 typedef const WCHAR *LPCWSTR;
 typedef const TCHAR *LPCTSTR;
+typedef HANDLE *PHANDLE;
 typedef HANDLE *LPHANDLE;
 
 typedef WCHAR OLECHAR;
@@ -354,6 +355,7 @@ typedef struct _HYPER_SIZEDARR {
 
 
 typedef CHAR BOOLEAN;
+typedef CHAR BOOL;
 #ifndef _tagBLOB_DEFINED
 #define _tagBLOB_DEFINED
 #define _BLOB_DEFINED
