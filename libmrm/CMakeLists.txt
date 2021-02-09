@@ -1,6 +1,6 @@
 add_library(mrmex STATIC)
 target_link_libraries(mrmex PRIVATE windows_sdk)
-target_include_directories(mrmex INTERFACE include)
+target_include_directories(mrmex PUBLIC include)
 
 if(NOT WIN32)
     target_link_libraries(mrmex PRIVATE windows_sdk)
@@ -31,7 +31,7 @@ target_sources(mrmex PRIVATE
 
 add_library(mrmmin STATIC)
 target_link_libraries(mrmmin PRIVATE windows_sdk)
-target_include_directories(mrmmin INTERFACE include)
+target_include_directories(mrmmin PUBLIC include)
 
 if(NOT WIN32)
     target_link_libraries(mrmmin PRIVATE windows_sdk)
