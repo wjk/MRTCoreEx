@@ -78,11 +78,7 @@ limitations in handling dllimport attribute.  */
 #elif defined(_MSC_VER)
 # define __CRT_INLINE __inline
 #else
-# if ((__MINGW_GNUC_PREREQ(4, 3) || defined(__clang__)) && __STDC_VERSION__ >= 199901L)
-#  define __CRT_INLINE extern inline __attribute__((__gnu_inline__))
-# else
 #  define __CRT_INLINE extern __inline__
-# endif
 #endif
 
 #if !defined(__MINGW_INTRIN_INLINE) && defined(__GNUC__)
@@ -145,36 +141,18 @@ limitations in handling dllimport attribute.  */
 #define __MINGW_ATTRIB_USED __attribute__ ((__used__))
 #define __MINGW_ATTRIB_DEPRECATED __attribute__ ((__deprecated__))
 #define __MINGW_ATTRIB_DEPRECATED_MSG(x) __attribute__ ((__deprecated__(x)))
-#define __MINGW_ATTRIB_USED
-#define __MINGW_ATTRIB_DEPRECATED __declspec(deprecated)
-#define __MINGW_ATTRIB_USED __MINGW_ATTRIB_UNUSED
-#define __MINGW_ATTRIB_DEPRECATED
 
 #ifndef __MINGW_ATTRIB_DEPRECATED_MSG
 #define __MINGW_ATTRIB_DEPRECATED_MSG(x) __MINGW_ATTRIB_DEPRECATED
 #endif
 
-#if  __MINGW_GNUC_PREREQ (3, 3)
-#define __MINGW_NOTHROW __attribute__ ((__nothrow__))
-#elif __MINGW_MSC_PREREQ(12, 0) && defined (__cplusplus)
-#define __MINGW_NOTHROW __declspec(nothrow)
-#else
+#define __MINGW_EXTENSION
+
 #define __MINGW_NOTHROW
-#endif
 
-#if __MINGW_GNUC_PREREQ (4, 4)
-#define __MINGW_ATTRIB_NO_OPTIMIZE __attribute__((__optimize__ ("0")))
-#else
 #define __MINGW_ATTRIB_NO_OPTIMIZE
-#endif
 
-#if __MINGW_GNUC_PREREQ (4, 4)
-#define __MINGW_PRAGMA_PARAM(x) _Pragma (#x)
-#elif __MINGW_MSC_PREREQ (13, 1)
-#define __MINGW_PRAGMA_PARAM(x) __pragma (x)
-#else
 #define __MINGW_PRAGMA_PARAM(x)
-#endif
 
 #define __MINGW_BROKEN_INTERFACE(x) \
   __MINGW_PRAGMA_PARAM(message ("Interface " _CRT_STRINGIZE(x) \
@@ -367,13 +345,6 @@ typedef int __int128 __attribute__ ((__mode__ (TI)));
 #define _CRT_UNUSED(x) (void)x
 #endif
 
-/* MSVC defines _NATIVE_NULLPTR_SUPPORTED when nullptr is supported. We emulate it here for GCC. */
-#if __MINGW_GNUC_PREREQ(4, 6)
-#if defined(__GNUC__) && (defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L)
-#define _NATIVE_NULLPTR_SUPPORTED
-#endif
-#endif
-
 /* We are activating __USE_MINGW_ANSI_STDIO for various define indicators.
  * printf ll modifier (unsupported by msvcrt.dll) is required by C99 and C++11 standards. */
 #if (defined (_POSIX) || defined (_POSIX_SOURCE) || defined (_POSIX_C_SOURCE) \
@@ -527,21 +498,7 @@ typedef int __int128 __attribute__ ((__mode__ (TI)));
 extern "C" {
 #endif
 
-
-#ifdef __MINGW_INTRIN_INLINE
-#ifdef __has_builtin
-#define __MINGW_DEBUGBREAK_IMPL !__has_builtin(__debugbreak)
-#else
-#define __MINGW_DEBUGBREAK_IMPL 1
-#endif
-#if __MINGW_DEBUGBREAK_IMPL == 1
-void __cdecl __debugbreak(void);
-__MINGW_INTRIN_INLINE void __cdecl __debugbreak(void)
-{
-  __asm__ __volatile__("int {$}3":);
-}
-#endif
-#endif
+#define __debugbreak() __builtin_trap()
 
 /* mingw-w64 specific functions: */
 const char *__mingw_get_crt_info (void);
