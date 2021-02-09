@@ -19,6 +19,8 @@ extern "C" {
  * No warranty is given; refer to the file DISCLAIMER within this package.
  */
 
+#define __C89_NAMELESS
+
 
 /*****************************************************************************
  * IWinTypesBase interface (v0.1)
@@ -26,16 +28,13 @@ extern "C" {
 #ifndef __IWinTypesBase_INTERFACE_DEFINED__
 #define __IWinTypesBase_INTERFACE_DEFINED__
 
-extern RPC_IF_HANDLE IWinTypesBase_v0_1_c_ifspec;
-extern RPC_IF_HANDLE IWinTypesBase_v0_1_s_ifspec;
-
-#if 0
-typedef byte BYTE;
+typedef unsigned char BYTE;
 typedef unsigned short WORD;
 typedef unsigned int UINT;
+typedef unsigned long ULONG;
 typedef int INT;
+typedef long LONG;
 typedef LONG WINBOOL;
-typedef LONG LONG;
 typedef ULONG DWORD;
 typedef void *HANDLE;
 typedef WORD *LPWORD;
@@ -50,21 +49,11 @@ typedef TCHAR *LPTSTR;
 typedef const WCHAR *LPCWSTR;
 typedef const TCHAR *LPCTSTR;
 typedef HANDLE *LPHANDLE;
-#endif
 
-#if !defined(OLE2ANSI)
 typedef WCHAR OLECHAR;
 typedef OLECHAR *LPOLESTR;
 typedef const OLECHAR *LPCOLESTR;
-
-#define OLESTR(str) L##str
-#else
-typedef char OLECHAR;
-typedef LPSTR LPOLESTR;
-typedef LPCSTR LPCOLESTR;
-
 #define OLESTR(str) str
-#endif
 
 #ifndef _WINDEF_
 #ifndef _MINWINDEF_
@@ -303,7 +292,7 @@ typedef enum tagMSHCTX {
 
 typedef struct _BYTE_BLOB {
     ULONG clSize;
-    byte abData[1];
+    BYTE abData[1];
 } BYTE_BLOB;
 
 typedef BYTE_BLOB *UP_BYTE_BLOB;
@@ -325,7 +314,7 @@ typedef DWORD_BLOB *UP_DWORD_BLOB;
 typedef struct _FLAGGED_BYTE_BLOB {
     ULONG fFlags;
     ULONG clSize;
-    byte abData[1];
+    BYTE abData[1];
 } FLAGGED_BYTE_BLOB;
 
 typedef FLAGGED_BYTE_BLOB *UP_FLAGGED_BYTE_BLOB;
@@ -340,7 +329,7 @@ typedef FLAGGED_WORD_BLOB *UP_FLAGGED_WORD_BLOB;
 
 typedef struct _BYTE_SIZEDARR {
     ULONG clSize;
-    byte *pData;
+    BYTE *pData;
 } BYTE_SIZEDARR;
 
 typedef struct _SHORT_SIZEDARR {
@@ -355,13 +344,13 @@ typedef struct _LONG_SIZEDARR {
 
 typedef struct _HYPER_SIZEDARR {
     ULONG clSize;
-    hyper *pData;
+    int64_t *pData;
 } HYPER_SIZEDARR;
 
 #endif  /* __IWinTypesBase_INTERFACE_DEFINED__ */
 
 
-typedef boolean BOOLEAN;
+typedef CHAR BOOLEAN;
 #ifndef _tagBLOB_DEFINED
 #define _tagBLOB_DEFINED
 #define _BLOB_DEFINED

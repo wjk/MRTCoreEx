@@ -19,12 +19,10 @@ extern "C" {
 #ifndef __IWinTypes_INTERFACE_DEFINED__
 #define __IWinTypes_INTERFACE_DEFINED__
 
-extern RPC_IF_HANDLE IWinTypes_v0_1_c_ifspec;
-extern RPC_IF_HANDLE IWinTypes_v0_1_s_ifspec;
 typedef struct tagRemHGLOBAL {
     LONG fNullHGlobal;
     ULONG cbData;
-    byte data[1];
+    BYTE data[1];
 } RemHGLOBAL;
 
 typedef struct tagRemHMETAFILEPICT {
@@ -32,28 +30,28 @@ typedef struct tagRemHMETAFILEPICT {
     LONG xExt;
     LONG yExt;
     ULONG cbData;
-    byte data[1];
+    BYTE data[1];
 } RemHMETAFILEPICT;
 
 typedef struct tagRemHENHMETAFILE {
     ULONG cbData;
-    byte data[1];
+    BYTE data[1];
 } RemHENHMETAFILE;
 typedef struct tagRemHBITMAP {
     ULONG cbData;
-    byte data[1];
+    BYTE data[1];
 } RemHBITMAP;
 
 typedef struct tagRemHPALETTE {
     ULONG cbData;
-    byte data[1];
+    BYTE data[1];
 } RemHPALETTE;
 
 typedef struct tagRemBRUSH {
     ULONG cbData;
-    byte data[1];
+    BYTE data[1];
 } RemHBRUSH;
-#if 0
+
 typedef UINT_PTR WPARAM;
 typedef LONG_PTR LPARAM;
 typedef LONG_PTR LRESULT;
@@ -105,7 +103,6 @@ typedef struct tagSIZEL {
 } SIZEL;
 typedef struct tagSIZEL *PSIZEL;
 typedef struct tagSIZEL *LPSIZEL;
-#endif
 
 #ifndef _PALETTEENTRY_DEFINED
 #define _PALETTEENTRY_DEFINED
@@ -132,8 +129,6 @@ typedef struct tagLOGPALETTE *PLOGPALETTE;
 typedef struct tagLOGPALETTE *LPLOGPALETTE;
 #endif
 
-#ifndef _WINDEF_
-typedef const RECTL *LPCRECTL;
 typedef struct tagRECT {
     LONG left;
     LONG top;
@@ -143,11 +138,7 @@ typedef struct tagRECT {
 typedef struct tagRECT *PRECT;
 typedef struct tagRECT *LPRECT;
 typedef const RECT *LPCRECT;
-#endif
-
-#if 0
-typedef FMTID *REFFMTID;
-#endif
+typedef const RECTL *LPCRECTL;
 
 #ifndef _ROTFLAGS_DEFINED
 #define _ROTFLAGS_DEFINED
@@ -277,7 +268,7 @@ typedef struct _userBITMAP {
     WORD bmPlanes;
     WORD bmBitsPixel;
     ULONG cbSize;
-    byte pBuffer[1];
+    BYTE pBuffer[1];
 } userBITMAP;
 
 typedef struct _userHBITMAP {
@@ -608,5 +599,3 @@ typedef struct __WIDL_wtypes_generated_name_00000001 {
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* __wtypes_h__ */
