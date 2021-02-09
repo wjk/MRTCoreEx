@@ -26,7 +26,7 @@
 #define __stdcall
 #endif
 
-#ifndef __GNUC__
+#ifdef _MSC_VER
 # ifndef __MINGW_IMPORT
 #  define __MINGW_IMPORT  __declspec(dllimport)
 # endif
@@ -89,11 +89,9 @@ limitations in handling dllimport attribute.  */
 #define __MINGW_INTRIN_INLINE extern __inline__ __attribute__((__always_inline__,__gnu_inline__))
 #endif
 
-#ifndef __CYGWIN__
 #ifdef __NO_INLINE__
 #undef __CRT__NO_INLINE
 #define __CRT__NO_INLINE 1
-#endif
 #endif
 
 #ifdef __cplusplus
@@ -114,7 +112,7 @@ limitations in handling dllimport attribute.  */
 # endif
 #endif /* !__GNUC__ */
 
-#if __MINGW_GNUC_PREREQ (3,1) && !defined __GNUG__
+#if defined(__GNUC__) || defined(__APPLE__)
 # define __restrict_arr __restrict
 #elif defined(_MSC_VER)
 # define __restrict_arr __restrict
@@ -130,56 +128,27 @@ limitations in handling dllimport attribute.  */
 # endif
 #endif
 
-#ifdef __GNUC__
 #define __MINGW_ATTRIB_NORETURN __attribute__ ((__noreturn__))
 #define __MINGW_ATTRIB_CONST __attribute__ ((__const__))
-#elif __MINGW_MSC_PREREQ(12, 0)
-#define __MINGW_ATTRIB_NORETURN __declspec(noreturn)
-#define __MINGW_ATTRIB_CONST
-#else
-#define __MINGW_ATTRIB_NORETURN
-#define __MINGW_ATTRIB_CONST
-#endif
 
-#if __MINGW_GNUC_PREREQ (3, 0)
 #define __MINGW_ATTRIB_MALLOC __attribute__ ((__malloc__))
 #define __MINGW_ATTRIB_PURE __attribute__ ((__pure__))
-#elif __MINGW_MSC_PREREQ(14, 0)
-#define __MINGW_ATTRIB_MALLOC __declspec(noalias) __declspec(restrict)
-#define __MINGW_ATTRIB_PURE
-#else
-#define __MINGW_ATTRIB_MALLOC
-#define __MINGW_ATTRIB_PURE
-#endif
 
 /* Attribute `nonnull' was valid as of gcc 3.3.  We don't use GCC's
    variadiac macro facility, because variadic macros cause syntax
    errors with  --traditional-cpp.  */
-#if  __MINGW_GNUC_PREREQ (3, 3)
 #define __MINGW_ATTRIB_NONNULL(arg) __attribute__ ((__nonnull__ (arg)))
 #else
-#define __MINGW_ATTRIB_NONNULL(arg)
-#endif /* GNUC >= 3.3 */
 
-#ifdef __GNUC__
 #define __MINGW_ATTRIB_UNUSED __attribute__ ((__unused__))
-#else
-#define __MINGW_ATTRIB_UNUSED
-#endif /* ATTRIBUTE_UNUSED */
 
-#if  __MINGW_GNUC_PREREQ (3, 1)
 #define __MINGW_ATTRIB_USED __attribute__ ((__used__))
 #define __MINGW_ATTRIB_DEPRECATED __attribute__ ((__deprecated__))
-#if __MINGW_GNUC_PREREQ (4, 5) || defined (__clang__)
 #define __MINGW_ATTRIB_DEPRECATED_MSG(x) __attribute__ ((__deprecated__(x)))
-#endif
-#elif __MINGW_MSC_PREREQ(12, 0)
 #define __MINGW_ATTRIB_USED
 #define __MINGW_ATTRIB_DEPRECATED __declspec(deprecated)
-#else
 #define __MINGW_ATTRIB_USED __MINGW_ATTRIB_UNUSED
 #define __MINGW_ATTRIB_DEPRECATED
-#endif /* GNUC >= 3.1 */
 
 #ifndef __MINGW_ATTRIB_DEPRECATED_MSG
 #define __MINGW_ATTRIB_DEPRECATED_MSG(x) __MINGW_ATTRIB_DEPRECATED
@@ -260,9 +229,6 @@ typedef int __int128 __attribute__ ((__mode__ (TI)));
 #endif /* __cplusplus */
 #endif /* __GNUC__ */
 
-#if !defined(_WIN32) && !defined(__CYGWIN__)
-#error Only Win32 target is supported!
-#endif
 
 #ifndef __nothrow
 #ifdef __cplusplus
@@ -272,7 +238,7 @@ typedef int __int128 __attribute__ ((__mode__ (TI)));
 #endif
 #endif /* __nothrow */
 
-#include <vadefs.h>	/* other headers depend on this include */
+#include <stdarg.h>	/* other headers depend on this include */
 
 #ifndef _CRT_STRINGIZE
 #define __CRT_STRINGIZE(_Value) #_Value
@@ -597,8 +563,10 @@ const char *__mingw_get_crt_info (void);
 #define __STDC_SECURE_LIB__ 200411L
 #define __GOT_SECURE_LIB__ __STDC_SECURE_LIB__
 
-#ifndef __WIDL__
-#include "sdks/_mingw_ddk.h"
+#if defined(UNICODE) || defined(_UNICODE)
+#define __MINGW_NAME_AW(name) name##w
+#else
+#define __MINGW_NAME_AW(name) name##a
 #endif
 
 #endif /* MINGW_SDK_INIT */
