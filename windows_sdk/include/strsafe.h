@@ -6,7 +6,7 @@
 #ifndef _STRSAFE_H_INCLUDED_
 #define _STRSAFE_H_INCLUDED_
 
-#include <_mingw_unicode.h>
+#include <_mingw.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -16,34 +16,9 @@
 #define __STRSAFE__NO_INLINE
 #endif
 
-#ifndef _SIZE_T_DEFINED
-#define _SIZE_T_DEFINED
-#undef size_t
-#ifdef _WIN64
-__MINGW_EXTENSION typedef unsigned __int64 size_t;
-#else
-typedef unsigned int size_t;
-#endif
-#endif
-
-#ifndef _SSIZE_T_DEFINED
-#define _SSIZE_T_DEFINED
-#undef ssize_t
-#ifdef _WIN64
-__MINGW_EXTENSION typedef __int64 ssize_t;
-#else
-typedef int ssize_t;
-#endif
-#endif
-
-#ifndef _WCHAR_T_DEFINED
-#define _WCHAR_T_DEFINED
-typedef unsigned short wchar_t;
-#endif
-
 #ifndef _HRESULT_DEFINED
 #define _HRESULT_DEFINED
-typedef __LONG32 HRESULT;
+typedef long HRESULT;
 #endif
 
 #ifndef SUCCEEDED
@@ -59,6 +34,9 @@ typedef __LONG32 HRESULT;
 #endif
 
 #ifndef C_ASSERT
+#if __has_feature(static_assert)
+#define C_ASSERT(e) _Static_assert(e, #e)
+#else
 #ifdef _MSC_VER
 # define C_ASSERT(e) typedef char __C_ASSERT__[(e)?1:-1]
 #else
@@ -74,10 +52,10 @@ typedef __LONG32 HRESULT;
 #endif
 
 #ifndef WINAPI
-#if defined(_ARM_)
-#define WINAPI
-#else
+#if defined(_MSC_VER)
 #define WINAPI __stdcall
+#else
+#define WINAPI
 #endif
 #endif
 
@@ -2075,3 +2053,5 @@ STRSAFE_INLINE_API StringGetsExWorkerW(STRSAFE_LPWSTR pszDest,size_t cchDest,siz
 #define _getws _getws_instead_use_StringCbGetsW_or_StringCchGetsW;
 #endif
 #endif
+
+#endif /* _STRSAFE_H_INCLUDED_ */
