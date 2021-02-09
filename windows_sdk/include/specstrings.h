@@ -335,6 +335,4 @@ extern "C" {
 }
 #endif
 
-#include <driverspecs.h>
-
 #endif
