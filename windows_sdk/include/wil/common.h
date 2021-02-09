@@ -11,15 +11,6 @@
 #ifndef __WIL_COMMON_INCLUDED
 #define __WIL_COMMON_INCLUDED
 
-#if defined(_KERNEL_MODE ) && !defined(__WIL_MIN_KERNEL)
-// This define indicates that the WIL usage is in a kernel mode context where
-// a high degree of WIL functionality is desired.
-//
-// Use (sparingly) to change behavior based on whether WIL is being used in kernel
-// mode or user mode.
-#define WIL_KERNEL_MODE
-#endif
-
 // Defining WIL_HIDE_DEPRECATED will hide everything deprecated.
 // Each wave of deprecation will add a new WIL_HIDE_DEPRECATED_YYMM number that can be used to lock deprecation at
 // a particular point, allowing components to avoid backslide and catch up to the current independently.
@@ -46,34 +37,26 @@
 #define WIL_WARN_DEPRECATED_1611
 #endif
 #ifdef WIL_WARN_DEPRECATED_1809
-#define WIL_WARN_DEPRECATED_1809_PRAGMA(...) __pragma(deprecated(__VA_ARGS__))
+#define WIL_WARN_DEPRECATED_1809_PRAGMA(...)
 #else
 #define WIL_WARN_DEPRECATED_1809_PRAGMA(...)
 #endif
 #ifdef WIL_WARN_DEPRECATED_1611
-#define WIL_WARN_DEPRECATED_1611_PRAGMA(...) __pragma(deprecated(__VA_ARGS__))
+#define WIL_WARN_DEPRECATED_1611_PRAGMA(...)
 #else
 #define WIL_WARN_DEPRECATED_1611_PRAGMA(...)
 #endif
 #ifdef WIL_WARN_DEPRECATED_1612
-#define WIL_WARN_DEPRECATED_1612_PRAGMA(...) __pragma(deprecated(__VA_ARGS__))
+#define WIL_WARN_DEPRECATED_1612_PRAGMA(...)
 #else
 #define WIL_WARN_DEPRECATED_1612_PRAGMA(...)
 #endif
 
-#if defined(_MSVC_LANG)
-#define __WI_SUPPRESS_4127_S __pragma(warning(push)) __pragma(warning(disable:4127)) __pragma(warning(disable:26498)) __pragma(warning(disable:4245))
-#define __WI_SUPPRESS_4127_E __pragma(warning(pop))
-#define __WI_SUPPRESS_NULLPTR_ANALYSIS __pragma(warning(suppress:28285)) __pragma(warning(suppress:6504))
-#define __WI_SUPPRESS_NONINIT_ANALYSIS __pragma(warning(suppress:26495))
-#define __WI_SUPPRESS_NOEXCEPT_ANALYSIS __pragma(warning(suppress:26439))
-#else
 #define __WI_SUPPRESS_4127_S
 #define __WI_SUPPRESS_4127_E
 #define __WI_SUPPRESS_NULLPTR_ANALYSIS
 #define __WI_SUPPRESS_NONINIT_ANALYSIS
 #define __WI_SUPPRESS_NOEXCEPT_ANALYSIS
-#endif
 
 #include <sal.h>
 
@@ -240,26 +223,11 @@
 
 //! @} // Macro composition helpers
 
-#if !defined(__cplusplus) || defined(__WIL_MIN_KERNEL)
-
-#define WI_ODR_PRAGMA(NAME, TOKEN)
-#define WI_NOEXCEPT
-
-#else
-#pragma warning(push)
-#pragma warning(disable:4714)    // __forceinline not honored
-
 // DO NOT add *any* further includes to this file -- there should be no dependencies from its usage
 #include "wistd_type_traits.h"
 
 //! This macro inserts ODR violation protection; the macro allows it to be compatible with straight "C" code
-#define WI_ODR_PRAGMA(NAME, TOKEN)  __pragma(detect_mismatch("ODR_violation_" NAME "_mismatch", TOKEN))
-
-#ifdef WIL_KERNEL_MODE
-WI_ODR_PRAGMA("WIL_KERNEL_MODE", "1")
-#else
-WI_ODR_PRAGMA("WIL_KERNEL_MODE", "0")
-#endif
+#define WI_ODR_PRAGMA(NAME, TOKEN)
 
 #if defined(_CPPUNWIND) && !defined(WIL_SUPPRESS_EXCEPTIONS)
 /** This define is automatically set when exceptions are enabled within wil.
@@ -317,7 +285,6 @@ Three exception modes are available:
 1)  Prefer this setting when it can be used.  This locks the binary to only supporting libraries which were built with exceptions enabled.
 2)  This locks the binary to libraries built without exceptions. */
 #define WIL_EXCEPTION_MODE
-#endif
 
 #if (__cplusplus >= 201703) || (_MSVC_LANG >= 201703)
 #define WIL_HAS_CXX_17 1
@@ -434,43 +401,6 @@ Three exception modes are available:
 #define WI_IsClearOrSingleFlagSetInMask(val, mask)          wil::details::IsClearOrSingleFlagSetHelper((val) & (mask))
 //! @}
 
-#if defined(WIL_DOXYGEN)
-/** This macro provides a C++ header with a guaranteed initialization function.
-Normally, were a global object's constructor used for this purpose, the optimizer/linker might throw
-the object away if it's unreferenced (which throws away the side-effects that the initialization function
-was trying to achieve).  Using this macro forces linker inclusion of a variable that's initialized by the
-provided function to elide that optimization.
-//!
-This functionality is primarily provided as a building block for header-based libraries (such as WIL)
-to be able to layer additional functionality into other libraries by their mere inclusion.  Alternative models
-of initialization should be used whenever they are available.
-~~~~
-#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
-WI_HEADER_INITITALIZATION_FUNCTION(InitializeDesktopFamilyApis, []
-{
-    g_pfnGetModuleName              = GetCurrentModuleName;
-    g_pfnFailFastInLoaderCallout    = FailFastInLoaderCallout;
-    return 1;
-});
-#endif
-~~~~
-The above example is used within WIL to decide whether or not the library containing WIL is allowed to use
-desktop APIs.  Building this functionality as #IFDEFs within functions would create ODR violations, whereas
-doing it with global function pointers and header initialization allows a runtime determination. */
-#define WI_HEADER_INITITALIZATION_FUNCTION(name, fn)
-#elif defined(_M_IX86)
-#define WI_HEADER_INITITALIZATION_FUNCTION(name, fn) \
-    extern "C" { __declspec(selectany) unsigned char g_header_init_ ## name = static_cast<unsigned char>(fn()); } \
-    __pragma(comment(linker, "/INCLUDE:_g_header_init_" #name))
-#elif defined(_M_IA64) || defined(_M_AMD64) || defined(_M_ARM) || defined(_M_ARM64)
-#define WI_HEADER_INITITALIZATION_FUNCTION(name, fn) \
-    extern "C" { __declspec(selectany) unsigned char g_header_init_ ## name = static_cast<unsigned char>(fn()); } \
-    __pragma(comment(linker, "/INCLUDE:g_header_init_" #name))
-#else
-    #error linker pragma must include g_header_init variation
-#endif
-
-
 /** All Windows Implementation Library classes and functions are located within the "wil" namespace.
 The 'wil' namespace is an intentionally short name as the intent is for code to be able to reference
 the namespace directly (example: `wil::srwlock lock;`) without a using statement.  Resist adding a using
@@ -586,13 +516,13 @@ namespace wil
     @return A C++ bool representing the evaluation of `val`. */
     template <typename T, __R_ENABLE_IF_IS_CLASS(T)>
     _Post_satisfies_(return == static_cast<bool>(val))
-    __forceinline constexpr bool verify_bool(const T& val)
+    constexpr bool verify_bool(const T& val)
     {
         return static_cast<bool>(val);
     }
 
     template <typename T, __R_ENABLE_IF_IS_NOT_CLASS(T)>
-    __forceinline constexpr bool verify_bool(T /*val*/)
+    constexpr bool verify_bool(T /*val*/)
     {
         static_assert(!wistd::is_same<T, T>::value, "Wrong Type: bool/BOOL/BOOLEAN/boolean expected");
         return false;
@@ -600,21 +530,21 @@ namespace wil
 
     template <>
     _Post_satisfies_(return == val)
-    __forceinline constexpr bool verify_bool<bool>(bool val)
+    constexpr bool verify_bool<bool>(bool val)
     {
         return val;
     }
 
     template <>
     _Post_satisfies_(return == (val != 0))
-    __forceinline constexpr bool verify_bool<int>(int val)
+    constexpr bool verify_bool<int>(int val)
     {
         return (val != 0);
     }
 
     template <>
     _Post_satisfies_(return == !!val)
-    __forceinline constexpr bool verify_bool<unsigned char>(unsigned char val)
+    constexpr bool verify_bool<unsigned char>(unsigned char val)
     {
         return !!val;
     }
@@ -626,7 +556,7 @@ namespace wil
     @return A Win32 BOOL representing the evaluation of `val`. */
     template <typename T>
     _Post_satisfies_(return == val)
-    __forceinline constexpr int verify_BOOL(T val)
+    constexpr int verify_BOOL(T val)
     {
         // Note: Written in terms of 'int' as BOOL is actually:  typedef int BOOL;
         static_assert((wistd::is_same<T, int>::value), "Wrong Type: BOOL expected");
@@ -700,33 +630,33 @@ namespace wil
     {
         // Use size-specific casts to avoid sign extending numbers -- avoid warning C4310: cast truncates constant value
         #define __WI_MAKE_UNSIGNED(val) \
-            (__pragma(warning(push)) __pragma(warning(disable: 4310 4309)) (sizeof(val) == 1 ? static_cast<unsigned char>(val) : \
+                                                                           (sizeof(val) == 1 ? static_cast<unsigned char>(val) : \
                                                                             sizeof(val) == 2 ? static_cast<unsigned short>(val) : \
                                                                             sizeof(val) == 4 ? static_cast<unsigned long>(val) :  \
-                                                                            static_cast<unsigned long long>(val)) __pragma(warning(pop)))
+                                                                            static_cast<unsigned long long>(val))
         #define __WI_IS_UNSIGNED_SINGLE_FLAG_SET(val) ((val) && !((val) & ((val) - 1)))
         #define __WI_IS_SINGLE_FLAG_SET(val) __WI_IS_UNSIGNED_SINGLE_FLAG_SET(__WI_MAKE_UNSIGNED(val))
 
         template <typename TVal, typename TFlags>
-        __forceinline constexpr bool AreAllFlagsSetHelper(TVal val, TFlags flags)
+        constexpr bool AreAllFlagsSetHelper(TVal val, TFlags flags)
         {
             return ((val & flags) == static_cast<decltype(val & flags)>(flags));
         }
 
         template <typename TVal>
-        __forceinline constexpr bool IsSingleFlagSetHelper(TVal val)
+        constexpr bool IsSingleFlagSetHelper(TVal val)
         {
             return __WI_IS_SINGLE_FLAG_SET(val);
         }
 
         template <typename TVal>
-        __forceinline constexpr bool IsClearOrSingleFlagSetHelper(TVal val)
+        constexpr bool IsClearOrSingleFlagSetHelper(TVal val)
         {
             return ((val == static_cast<wistd::remove_reference_t<TVal>>(0)) || IsSingleFlagSetHelper(val));
         }
 
         template <typename TVal, typename TMask, typename TFlags>
-        __forceinline constexpr void UpdateFlagsInMaskHelper(_Inout_ TVal& val, TMask mask, TFlags flags)
+        constexpr void UpdateFlagsInMaskHelper(_Inout_ TVal& val, TMask mask, TFlags flags)
         {
             val = static_cast<wistd::remove_reference_t<TVal>>((val & ~mask) | (flags & mask));
         }
