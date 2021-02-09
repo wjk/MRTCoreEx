@@ -1,5 +1,5 @@
 add_library(mrmex STATIC)
-add_dependencies(mrmex PRIVATE windows_sdk)
+target_link_libraries(mrmex PRIVATE windows_sdk)
 target_include_directories(mrmex INTERFACE include)
 
 if(NOT WIN32)
@@ -30,7 +30,7 @@ target_sources(mrmex PRIVATE
 ##########
 
 add_library(mrmmin STATIC)
-add_dependencies(mrmmin PRIVATE windows_sdk)
+target_link_libraries(mrmmin PRIVATE windows_sdk)
 target_include_directories(mrmmin INTERFACE include)
 
 if(NOT WIN32)
