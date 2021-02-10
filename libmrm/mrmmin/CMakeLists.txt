@@ -5,7 +5,7 @@ if(WIN32)
     target_link_libraries(mrmmin PRIVATE wil)
     target_compile_definitions(mrmmim PRIVATE CMAKE_WIN32_TARGET)
 else()
-    target_link_libraries(mrmmin PRIVATE windows_sdk)
+    target_link_libraries(mrmmin PRIVATE windows_shim)
 endif()
 
 target_sources(mrmmin PRIVATE
