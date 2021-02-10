@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(libmrm)
 
-if(NOT WIN32)
+if(WIN32)
+    add_subdirectory(wil)
+else()
     add_subdirectory(windows_sdk)
 endif()
