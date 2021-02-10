@@ -1,11 +1,11 @@
 add_library(mrmmin STATIC)
 target_include_directories(mrmmin PUBLIC ../include)
 
-if(WIN32)
+if(CMAKE_HOST_WIN32)
     target_link_libraries(mrmmin PRIVATE wil)
-    target_compile_definitions(mrmmim PRIVATE CMAKE_WIN32_TARGET)
 else()
     target_link_libraries(mrmmin PRIVATE windows_shim)
+    target_compile_definitions(mrmmin PRIVATE CMAKE_NONWIN32_TARGET)
 endif()
 
 target_sources(mrmmin PRIVATE

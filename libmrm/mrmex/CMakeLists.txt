@@ -1,11 +1,11 @@
 add_library(mrmex STATIC)
 target_include_directories(mrmex PUBLIC ../include)
 
-if(WIN32)
+if(CMAKE_HOST_WIN32)
     target_link_libraries(mrmex PRIVATE wil)
-    target_compile_definitions(mrmex PRIVATE CMAKE_WIN32_TARGET)
 else()
     target_link_libraries(mrmex PRIVATE windows_shim)
+    target_compile_definitions(mrmex PRIVATE CMAKE_NONWIN32_TARGET)
 endif()
 
 target_sources(mrmex PRIVATE
