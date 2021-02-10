@@ -388,6 +388,8 @@ typedef struct _SID_AND_ATTRIBUTES *PSID_AND_ATTRIBUTES;
 #endif
 /* Begin additional prototypes for all interfaces */
 
+#define ARRAYSIZE(array) (sizeof(array)/sizeof(array[0]))
+
 
 /* End additional prototypes */
 

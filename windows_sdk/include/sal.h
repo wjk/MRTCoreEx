@@ -381,6 +381,7 @@
 
 #define __bcount(size)
 #define __ecount(size)
+#define __field_ecount(size)
 
 #define __in_bcount(size)
 #define __in_bcount_nz(size)
