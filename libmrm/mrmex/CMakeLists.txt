@@ -6,6 +6,8 @@ if(CMAKE_HOST_WIN32)
 else()
     target_link_libraries(mrmex PRIVATE windows_shim)
     target_compile_definitions(mrmex PRIVATE CMAKE_NONWIN32_TARGET)
+
+    target_compile_options(mrmex PUBLIC -Wno-inconsistent-missing-override)
 endif()
 
 target_sources(mrmex PRIVATE

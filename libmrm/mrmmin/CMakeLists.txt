@@ -6,6 +6,8 @@ if(CMAKE_HOST_WIN32)
 else()
     target_link_libraries(mrmmin PRIVATE windows_shim)
     target_compile_definitions(mrmmin PRIVATE CMAKE_NONWIN32_TARGET)
+
+    target_compile_options(mrmmin PUBLIC -Wno-inconsistent-missing-override)
 endif()
 
 target_sources(mrmmin PRIVATE
