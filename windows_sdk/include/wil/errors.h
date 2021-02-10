@@ -7,4 +7,6 @@
 #define RETURN_IF_NULL(what) RETURN_HR_IF_NULL(E_FAIL, what)
 #define RETURN_IF_NULL_ALLOC(what) RETURN_HR_IF_NULL(E_OUTOFMEMORY, what)
 
+#define RETURN_HR_IF_EXPECTED(hr, expr) RETURN_HR_IF(hr, expr)
+
 #endif /* MRTCOREEX_WIL_ERRORS_H */
