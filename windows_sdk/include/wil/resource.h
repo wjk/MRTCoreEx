@@ -2,6 +2,7 @@
 #define MRTCOREEX_WIL_RESOURCES_H
 
 #include <memory>
+#include <wil/errors.h>
 
 namespace wil {
     template<typename TDeletionFunction, TDeletionFunction func>

@@ -7,7 +7,6 @@
 #include "wtypes.h"
 #include "wtypesbase.h"
 #include "winerror.h"
-#include "wil_errors.h"
 #include "functions.h"
 
 #ifdef __cplusplus
