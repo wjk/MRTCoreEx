@@ -1903,6 +1903,7 @@ STRSAFE_INLINE_API StringGetsExWorkerW(STRSAFE_LPWSTR pszDest,size_t cchDest,siz
 #define StringGetsExWorkerA StringGetsExWorkerA_instead_use_StringCchGetsA_or_StringCbGetsA
 #define StringGetsExWorkerW StringGetsExWorkerW_instead_use_StringCchGetsW_or_StringCbGetsW
 
+#define STRSAFE_NO_DEPRECATE
 #ifndef STRSAFE_NO_DEPRECATE
 
 #undef strcpy
