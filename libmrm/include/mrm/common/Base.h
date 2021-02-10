@@ -3,18 +3,16 @@
 
 #pragma once
 
-/* DEFRESULT 
+/* DEFRESULT
      * DEF error result type.  DEF results are 32-bits and have the structure:
      *     0xDEFXXXYY
      * Where 'XXX' is an 12-bit facility code and 'YY' is an 8-bit error code.
      */
 typedef long DEFRESULT;
 
-#if CMAKE_WIN32_TARGET
 #if defined(__cplusplus)
 #define RESOURCE_SUPPRESS_STL
 #include <wil/resource.h>
-#endif
 #endif
 
 #include "mrm/common/Platform.h"
@@ -76,7 +74,7 @@ extern "C"
 #define DEF_ATOM_MAX_POOL_INDEX (DEF_ATOM_MAX_POOL_COUNT - 1)
 
     /*!
-     * A DEF_ATOM structure consists of a 16-bit pool index (type \ref 
+     * A DEF_ATOM structure consists of a 16-bit pool index (type \ref
      * DEF_ATOM_POOL_INDEX) and a 16-bit atom index (of type \ref DEF_ATOM_INDEX),
      * which can also be referenced or set as a single 32-bit value.
      */
@@ -286,7 +284,7 @@ extern "C"
     } DEFRESULTTYPE;
 
     /*!
- *  ::DEFRESULT refers either to an internal buffer or to an externally 
+ *  ::DEFRESULT refers either to an internal buffer or to an externally
  */
     typedef struct _DEFBLOBRESULT
     {
