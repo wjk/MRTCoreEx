@@ -3,11 +3,7 @@
 
 #pragma once
 
-#ifdef DEF_RTL
-#include "mrm/common/PlatformRtl.h"
-#else
 #include "mrm/common/PlatformWin32.h"
-#endif
 
 #ifdef __cplusplus
 extern "C"
@@ -20,7 +16,7 @@ extern "C"
 
     ULONG DefExpandEnvironmentStrings(__in PCWSTR Source, __out_opt PWSTR Destination, __in ULONG Size);
 
-    ULONG _DefVirtualQuery(__in_opt PVOID Address, __out PMEMORY_BASIC_INFORMATION Buffer, __in ULONG Length);
+    ULONG _DefVirtualQuery(__in_opt PVOID Address, __out PVOID Buffer, __in ULONG Length);
 
     void _DefCloseHandle(__in HANDLE handle);
 
