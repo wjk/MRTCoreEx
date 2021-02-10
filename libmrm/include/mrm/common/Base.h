@@ -10,9 +10,11 @@
      */
 typedef long DEFRESULT;
 
+#if CMAKE_WIN32_TARGET
 #if defined(__cplusplus)
 #define RESOURCE_SUPPRESS_STL
 #include <wil/resource.h>
+#endif
 #endif
 
 #include "mrm/common/Platform.h"
