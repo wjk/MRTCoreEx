@@ -21,13 +21,16 @@ extern "C" {
 
 #define __C89_NAMELESS
 
-
 /*****************************************************************************
  * IWinTypesBase interface (v0.1)
  */
 #ifndef __IWinTypesBase_INTERFACE_DEFINED__
 #define __IWinTypesBase_INTERFACE_DEFINED__
 
+#define TRUE 1
+#define FALSE 0
+
+#define VOID void
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
 typedef unsigned int UINT;
